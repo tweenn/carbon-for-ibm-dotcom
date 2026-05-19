@@ -10,13 +10,13 @@
 @use '@carbon/styles/scss/spacing' as *;
 @use '@carbon/styles/scss/theme' as *;
 @use '@carbon/styles/scss/type' as *;
-@use '@carbon/ibmdotcom-styles/scss/components/video-player';
+@use '@carbon/ibmdotcom-styles/scss/components/video-player-v7';
 @use '../expressive-modal/expressive-modal';
 @use '../../globals/utils/flex-grid' as *;
 @use '../../globals/vars' as *;
 @use '../../globals/imports' as *;
 @use '../expressive-modal' as *;
-@use '../video-player' as *;
+@use '../video-player-v7' as *;
 
 @mixin lightbox-media-viewer {
   :host(#{$c4d-prefix}-lightbox-image-viewer),
@@ -222,6 +222,7 @@
     }
   }
 
+  ::slotted(#{$c4d-prefix}-video-player-container),
   ::slotted(#{$c4d-prefix}-video-player-container-v7) {
     inline-size: 100%;
   }

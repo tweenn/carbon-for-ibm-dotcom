@@ -122,7 +122,8 @@
       margin-block-start: $spacing-07;
     }
 
-    ::slotted(#{$c4d-prefix}-video-player-container) {
+    ::slotted(#{$c4d-prefix}-video-player-container),
+    ::slotted(#{$c4d-prefix}-video-player-container-v7) {
       // Ensures the margin gets effective
       display: block;
     }
