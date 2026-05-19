@@ -1,0 +1,271 @@
+/**
+ * Copyright IBM Corp. 2016, 2025
+ *
+ * This source code is licensed under the Apache-2.0 license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+@use '../../globals/vars' as *;
+@use '../../globals/imports' as *;
+@use '../../globals/utils/ratio-base' as *;
+@use '@carbon/styles/scss/colors' as *;
+@use '@carbon/styles/scss/config' as *;
+@use '@carbon/styles/scss/motion' as *;
+@use '@carbon/styles/scss/spacing' as *;
+@use '@carbon/styles/scss/theme' as *;
+@use '@carbon/styles/scss/type' as *;
+@use '@carbon/styles/scss/utilities/convert' as *;
+@use '@carbon/styles/scss/components/button/vars' as *;
+@use '@carbon/styles/scss/breakpoint' as *;
+$aspect-ratios: ((16, 9), (9, 16), (2, 1), (1, 2), (4, 3), (3, 4), (1, 1));
+
+@mixin video-player-v7 {
+  // Make the video player container a block for purposes of the intersection
+  // observer.
+  :host(#{$c4d-prefix}-video-player-container-v7) {
+    display: block;
+  }
+
+  :host(#{$c4d-prefix}-video-player-v7),
+  .#{$c4d-prefix}--video-player {
+    color: var(--#{$c4d-prefix}--video-caption--color, $text-secondary);
+
+    .#{$c4d-prefix}--image__img {
+      block-size: 100%;
+      inline-size: 100%;
+    }
+
+    #{$c4d-prefix}-image {
+      padding-block-start: 0;
+    }
+  }
+
+  :host(#{$c4d-prefix}-video-player-v7[background-mode]),
+  .#{$c4d-prefix}--video-player[background-mode] {
+    .#{$c4d-prefix}--video-player__video-container {
+      block-size: 100%;
+    }
+
+    /**
+     * These styles mock `object-fit: cover;` and `object-position: center`.
+     *   - Aspect ratio forces the shape of the element.
+     *   - Min-width/height force the element to cover the entire parent footprint.
+     *   - inset/translate combine to ensure the element is centered over the parent footprint.
+     */
+    ::slotted(.#{$c4d-prefix}--video-player__video),
+    .#{$c4d-prefix}--video-player__video {
+      aspect-ratio: var(--native-file-aspect-ratio, 16 / 9);
+      inset: 50% 0 0 50%;
+      min-block-size: 100%;
+      min-inline-size: 100%;
+      translate: -50% -50%;
+    }
+
+    /**
+     * overwriting inset property so the video player is centered in the container when in RTL mode
+     */
+    ::slotted(.#{$c4d-prefix}--video-player__video[dir-mode='rtl']),
+    .#{$c4d-prefix}--video-player__video[dir-mode='rtl'] {
+      inset: 50% -50% 0 50%;
+
+      @include breakpoint-down('lg') {
+        inset: 50% -67% 0 50%;
+      }
+    }
+  }
+
+  .#{$c4d-prefix}--video-player
+    .#{$c4d-prefix}--video-player__image-overlay:focus::before {
+    position: absolute;
+    z-index: 1;
+    border: 1px solid $focus-inverse;
+    content: ' ';
+    inset: $spacing-01;
+    outline: $spacing-01 solid $focus;
+  }
+
+  :host(#{$c4d-prefix}-video-player-v7) #{$c4d-prefix}-image,
+  .#{$c4d-prefix}--video-player .#{$c4d-prefix}--image {
+    position: relative;
+    block-size: 100%;
+    inline-size: 100%;
+
+    &::before {
+      position: absolute;
+      z-index: 1;
+      background-color: $border-inverse;
+      block-size: 100%;
+      content: '';
+      inline-size: 100%;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      opacity: 0;
+      transition: opacity $duration-moderate-01 motion(standard, productive);
+
+      @media screen and (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
+
+    &:hover::before {
+      opacity: 0.08;
+    }
+  }
+
+  .#{$c4d-prefix}--video-player__video-container {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+
+    &:focus {
+      outline: none;
+    }
+
+    ::slotted(.#{$c4d-prefix}--video-player__video),
+    .#{$c4d-prefix}--video-player__video {
+      position: absolute;
+      inset: 0;
+    }
+
+    @include ratio-base(16, 9, true);
+
+    @each $aspect-ratio in $aspect-ratios {
+      $width: nth($aspect-ratio, 1);
+      $height: nth($aspect-ratio, 2);
+
+      &.#{$c4d-prefix}--video-player__aspect-ratio {
+        &--#{$width}x#{$height} {
+          @include ratio-base($width, $height, true);
+
+          overflow: visible;
+        }
+      }
+    }
+  }
+
+  .#{$c4d-prefix}--video-player__video-caption {
+    @include type-style('caption-02');
+
+    max-inline-size: 90%;
+
+    padding-block-start: var(
+      --#{$c4d-prefix}--video-caption--padding,
+      $spacing-03
+    );
+  }
+
+  // Ensuring caption is correctly displayed when it has RTL mixed with LTR copy
+  .#{$c4d-prefix}--video-player__video-caption[dir='rtl'] {
+    direction: rtl;
+    text-align: end;
+    unicode-bidi: plaintext;
+  }
+
+  .#{$c4d-prefix}--video-player__image-overlay {
+    padding: 0;
+    border: none;
+    block-size: 100%;
+    cursor: pointer;
+    inline-size: 100%;
+
+    &:focus {
+      outline: 3px solid $focus;
+      outline-offset: 1px;
+    }
+
+    &:hover,
+    &:active {
+      svg {
+        circle {
+          fill: $gray-100;
+          opacity: 0.9;
+        }
+
+        path {
+          fill: $icon-on-color;
+        }
+      }
+    }
+
+    svg {
+      position: absolute;
+      inset-block-start: calc(50% - #{$spacing-07});
+      inset-inline-end: calc(50% - #{$spacing-07});
+
+      circle,
+      path {
+        transition: fill $duration-moderate-01 motion(standard, productive),
+          opacity $duration-moderate-01 motion(standard, productive);
+
+        @media screen and (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
+      }
+
+      circle {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  :host(#{$c4d-prefix}-video-player-v7)
+    .#{$c4d-prefix}--video-player__image-overlay,
+  .#{$c4d-prefix}--video-player .#{$c4d-prefix}--video-player__image-overlay {
+    &:active {
+      #{$c4d-prefix}-image::before,
+      .#{$c4d-prefix}--image::before {
+        opacity: 0.12;
+      }
+    }
+  }
+
+  .#{$c4d-prefix}--video-player__toggle-playback {
+    position: absolute;
+    z-index: 100;
+    padding: 0.875rem;
+    border: 0;
+    background-color: $overlay;
+    block-size: $spacing-09;
+    color: #ffffff;
+    inline-size: $spacing-09;
+
+    &--top-left {
+      inset-block-start: 0;
+      inset-inline-start: 0;
+    }
+
+    &--top-right {
+      inset-block-start: 0;
+      inset-inline-end: 0;
+    }
+
+    &--bottom-right {
+      inset-block-end: 0;
+      inset-inline-end: 0;
+    }
+
+    &--bottom-left {
+      inset-block-end: 0;
+      inset-inline-start: 0;
+    }
+
+    /* stylelint-disable-next-line caem/require-color-with-bg */
+    &:hover {
+      // Grey 100, more opaque.
+      background-color: rgba(22, 22, 22, 0.9);
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: 2px solid $focus;
+    }
+  }
+
+  // Prevent any pointer events from getting through to the slotted player div
+  // when in intersection mode.
+  :host(#{$c4d-prefix}-video-player-v7[intersection-mode]) {
+    ::slotted(.#{$c4d-prefix}--video-player__video) {
+      pointer-events: none;
+    }
+  }
+}
