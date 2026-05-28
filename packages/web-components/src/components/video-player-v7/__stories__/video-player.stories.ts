@@ -115,41 +115,56 @@ export const autoplayMuted = (args) => {
   `;
 };
 
-export const transparentBackground = (args) => {
-  const { caption, hideCaption, thumbnail, videoId } = args?.VideoPlayer ?? {};
+export const ambient = (args) => {
+  const { videoId } = args?.VideoPlayer ?? {};
   return html`
     <style>
       c4d-video-player-container-v7[background-mode] {
         display: block;
         aspect-ratio: 16/9;
         outline: 2px solid red;
+        outline-offset: -2px;
       }
     </style>
     <c4d-video-player-container-v7
       background-mode
-      video-id=${videoId}
-      caption=${caption}
-      ?hide-caption=${hideCaption}
-      thumbnail=${thumbnail}></c4d-video-player-container-v7>
+      video-id=${videoId}></c4d-video-player-container-v7>
   `;
 };
 
-export const ambient = (args) => {
-  const { caption, hideCaption, thumbnail, videoId } = args?.VideoPlayer ?? {};
+export const ambientMultiple = (args) => {
+  const { videoId } = args?.VideoPlayer ?? {};
   return html`
     <style>
+      p {
+        padding-bottom: 1rem;
+        padding-top: 2rem;
+      }
+      p:first-of-type {
+        padding-top: 0 !important;
+      }
       c4d-video-player-container-v7[background-mode] {
         display: block;
         aspect-ratio: 16/9;
         outline: 2px solid red;
+        outline-offset: -2px;
       }
     </style>
+
+    <p>Variable Media ID: ${videoId}</p>
     <c4d-video-player-container-v7
       background-mode
-      video-id=${videoId}
-      caption=${caption}
-      ?hide-caption=${hideCaption}
-      thumbnail=${thumbnail}></c4d-video-player-container-v7>
+      video-id=${videoId}></c4d-video-player-container-v7>
+
+    <p>Fixed Media ID: 1_9h94wo6b</p>
+    <c4d-video-player-container-v7
+      background-mode
+      video-id='1_9h94wo6b'></c4d-video-player-container-v7>
+
+    <p>Fixed Media ID: 1_p2osmd1z</p>
+    <c4d-video-player-container-v7
+      background-mode
+      video-id='1_p2osmd1z'></c4d-video-player-container-v7>
   `;
 };
 
@@ -183,7 +198,7 @@ aspectRatio4x3.story = {
           caption: text('Custom caption (caption):', ''),
           hideCaption: boolean('Hide caption (hideCaption):', false),
           thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_p2osmd1z',
+          videoId: text('Video ID', '1_p2osmd1z'),
         };
       },
     },
@@ -211,7 +226,7 @@ aspectRatio1x1.story = {
           caption: text('Custom caption (caption):', ''),
           hideCaption: boolean('Hide caption (hideCaption):', false),
           thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_9h94wo6b',
+          videoId: text('Video ID', '1_9h94wo6b'),
         };
       },
     },
@@ -243,7 +258,7 @@ withLightboxMediaViewer.story = {
           caption: text('Custom caption (caption):', ''),
           hideCaption: boolean('Hide caption (hideCaption):', false),
           thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '0_ibuqxqbe',
+          videoId: text('Video ID', '0_ibuqxqbe'),
         };
       },
     },
@@ -272,7 +287,7 @@ autoplay.story = {
           caption: text('Custom caption (caption):', ''),
           hideCaption: boolean('Hide caption (hideCaption):', false),
           thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_p2osmd1z',
+          videoId: text('Video ID', '1_p2osmd1z'),
         };
       },
     },
@@ -300,35 +315,7 @@ autoplayMuted.story = {
           caption: text('Custom caption (caption):', ''),
           hideCaption: boolean('Hide caption (hideCaption):', false),
           thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_p2osmd1z',
-        };
-      },
-    },
-    propsSet: {
-      default: {
-        VideoPlayer: {
-          aspectRatio: '4x3',
-          caption: '',
-          hideCaption: false,
-          thumbnail: '',
-          videoId: '1_p2osmd1z',
-        },
-      },
-    },
-  },
-};
-
-transparentBackground.story = {
-  name: 'Transparent background',
-  parameters: {
-    knobs: {
-      VideoPlayer: () => {
-        return {
-          aspectRatio: '4x3',
-          caption: text('Custom caption (caption):', ''),
-          hideCaption: boolean('Hide caption (hideCaption):', false),
-          thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_p2osmd1z',
+          videoId: text('Video ID', '1_p2osmd1z'),
         };
       },
     },
@@ -352,22 +339,34 @@ ambient.story = {
     knobs: {
       VideoPlayer: () => {
         return {
-          aspectRatio: '4x3',
-          caption: text('Custom caption (caption):', ''),
-          hideCaption: boolean('Hide caption (hideCaption):', false),
-          thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_p2osmd1z',
+          videoId: text('Video ID', '1_p2osmd1z'),
         };
       },
     },
     propsSet: {
       default: {
         VideoPlayer: {
-          aspectRatio: '4x3',
-          caption: '',
-          hideCaption: false,
-          thumbnail: '',
           videoId: '1_p2osmd1z',
+        },
+      },
+    },
+  },
+};
+
+ambientMultiple.story = {
+  name: 'Ambient - Multiple',
+  parameters: {
+    knobs: {
+      VideoPlayer: () => {
+        return {
+          videoId: text('Video ID', '1_mq9h9c34'),
+        };
+      },
+    },
+    propsSet: {
+      default: {
+        VideoPlayer: {
+          videoId: '1_mq9h9c34',
         },
       },
     },
@@ -394,7 +393,7 @@ intersectionMode.story = {
           caption: text('Custom caption (caption):', ''),
           hideCaption: boolean('Hide caption (hideCaption):', false),
           thumbnail: text('Custom thumbnail (thumbnail):', ''),
-          videoId: '1_mq9h9c34',
+          videoId: text('Video ID', '1_mq9h9c34'),
           buttonPosition: select(
             'Button position (buttonPosition)',
             enumValsToArray(BUTTON_POSITION),

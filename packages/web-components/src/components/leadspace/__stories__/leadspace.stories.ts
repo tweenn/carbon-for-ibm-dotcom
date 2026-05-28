@@ -480,9 +480,7 @@ export const MediumWithVideo = (args) => {
       <c4d-background-media slot="image" opacity="100">
         <c4d-video-player-container-v7
           video-id="0_ibuqxqbe"
-          auto-play
-          muted
-          playing-mode="inline"></c4d-video-player-container-v7>
+          background-mode></c4d-video-player-container-v7>
       </c4d-background-media>
     </c4d-leadspace>
   `;
@@ -637,9 +635,7 @@ export const ShortWithVideo = (args) => {
       <c4d-background-media slot="image" opacity="100">
         <c4d-video-player-container-v7
           video-id="0_ibuqxqbe"
-          auto-play
-          muted
-          playing-mode="background"></c4d-video-player-container-v7>
+          background-mode></c4d-video-player-container-v7>
       </c4d-background-media>
     </c4d-leadspace>
   `;
@@ -758,9 +754,7 @@ export const CenteredWithVideo = (args) => {
       <c4d-background-media slot="image" opacity="100">
         <c4d-video-player-container-v7
           video-id="0_ibuqxqbe"
-          auto-play
-          muted
-          playing-mode="background"></c4d-video-player-container-v7>
+          background-mode></c4d-video-player-container-v7>
       </c4d-background-media>
     </c4d-leadspace>
   `;
